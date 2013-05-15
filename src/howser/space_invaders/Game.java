@@ -31,14 +31,33 @@ public class Game extends Canvas implements Runnable {
 		frame.add(this, BorderLayout.CENTER);
 		frame.pack();
 		
+		//frame.setIconImage(_IMAGE SIMEOTNGA);
 		frame.setLocationRelativeTo(null);
 		frame.setResizable(false);
 		frame.setVisible(true);
 	}
 	
 	public void run() {
+		int frames = 0;
+		int ticks = 0;
+		double targetTickTime = 1000000000/60;
+		double lastUpdateTime = System.nanoTime();
+		double lastFPSPrintTime = System.nanoTime();
 		while (running){
-			System.out.println("Running");
+			double nowTime = System.nanoTime();
+			if (nowTime - lastUpdateTime >= targetTickTime){
+				ticks++;
+				tick();
+				lastUpdateTime = System.nanoTime();
+			}
+			if (nowTime - lastFPSPrintTime >= 1000000000){
+				System.out.println("Updates: " + ticks + ", Frames: " + frames);
+				ticks = 0;
+				frames = 0;
+				lastFPSPrintTime = System.nanoTime();
+			}
+			render();
+			frames++;
 		}
 	}
 	
