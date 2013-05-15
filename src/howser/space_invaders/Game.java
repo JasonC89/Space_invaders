@@ -1,5 +1,7 @@
 package howser.space_invaders;
 
+import howser.space_invaders.gfx.SpriteSheet;
+
 import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Dimension;
@@ -15,6 +17,7 @@ public class Game extends Canvas implements Runnable {
 	public static final int SCALE = 3;
 	public static final String NAME = "Space invaders";
 	private boolean running = false;
+	private SpriteSheet test;
 	
 	public Game(){
 		this.setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));	
@@ -38,11 +41,14 @@ public class Game extends Canvas implements Runnable {
 	}
 	
 	public void run() {
+		init();
+		
 		int frames = 0;
 		int ticks = 0;
 		double targetTickTime = 1000000000/60;
 		double lastUpdateTime = System.nanoTime();
 		double lastFPSPrintTime = System.nanoTime();
+		
 		while (running){
 			double nowTime = System.nanoTime();
 			if (nowTime - lastUpdateTime >= targetTickTime){
@@ -71,7 +77,7 @@ public class Game extends Canvas implements Runnable {
 	}
 	
 	public void init(){
-		
+		test = new SpriteSheet("/sprite_sheet.png");
 	}
 	
 	public void tick(){
