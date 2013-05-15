@@ -110,6 +110,7 @@ public class Game extends Canvas implements Runnable {
 			return;
 		}
 		
+		//THIS IS JUST FOR TESTING
 		int[] data = new int[WIDTH*HEIGHT];
 		for (int i = 0; i < data.length; i++){
 			data[i] = rand.nextInt() << 16;
