@@ -147,7 +147,7 @@ public class Game extends Canvas implements Runnable {
 				data[i] = 0xff000000;
 			}
 		}
-
+		
 		frame.renderToFrame(data, 0, 0, WIDTH, HEIGHT);
 		frame.renderToFrame(sprite.getPixels(), x, y, sprite.getWidth(),
 				sprite.getHeight());
