@@ -8,6 +8,7 @@ import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
@@ -24,13 +25,18 @@ public class Game extends Canvas implements Runnable {
 	public static final int SCALE = 3;
 	public static final String NAME = "Space invaders";
 	private boolean running = false;
-	private SpriteSheet test;
-	
+
 	private BufferedImage image;
 	private int[] pixels;
 	private Frame frame;
+	private InputHandler input;
+
+	// for testing
+	private SpriteSheet test;
 	private Random rand = new Random();
 	private Sprite sprite;
+
+	private int x, y;
 
 	public Game() {
 
@@ -52,7 +58,7 @@ public class Game extends Canvas implements Runnable {
 		jFrame.add(this, BorderLayout.CENTER);
 		jFrame.pack();
 
-		// jFrame.setIconImage(_IMAGE SIMEOTNGA);
+		// jFrame.setIconImage(ICON_IMAGE_SOMETHING);
 		jFrame.setLocationRelativeTo(null);
 		jFrame.setResizable(false);
 		jFrame.setVisible(true);
@@ -69,19 +75,26 @@ public class Game extends Canvas implements Runnable {
 
 		while (running) {
 			double nowTime = System.nanoTime();
-			if (nowTime - lastUpdateTime >= targetTickTime) {
+			boolean shouldRender = false;
+
+			while (nowTime - lastUpdateTime >= targetTickTime) {
 				ticks++;
 				tick();
 				lastUpdateTime = System.nanoTime();
+				shouldRender = true;
 			}
+
+			if (shouldRender) {
+				render();
+				frames++;
+			}
+
 			if (nowTime - lastFPSPrintTime >= 1000000000) {
 				System.out.println("Updates: " + ticks + ", Frames: " + frames);
 				ticks = 0;
 				frames = 0;
 				lastFPSPrintTime = System.nanoTime();
 			}
-			render();
-			frames++;
 		}
 	}
 
@@ -97,33 +110,53 @@ public class Game extends Canvas implements Runnable {
 	public void init() {
 		test = new SpriteSheet("/sprite_sheet.png");
 		sprite = Sprite.getSpriteFromSheet(test, 0, 0, 16, 16);
+
+		input = new InputHandler();
+		input.addKeyListen(KeyEvent.VK_LEFT);
+		input.addKeyListen(KeyEvent.VK_RIGHT);
+		this.addKeyListener(input);
+		x = WIDTH / 2;
+		y = HEIGHT - 20;
 	}
 
 	public void tick() {
-
+		if (input.isKeyPressed(KeyEvent.VK_LEFT)) {
+			x--;
+			System.out.println(x);
+		}
+		if (input.isKeyPressed(KeyEvent.VK_RIGHT)) {
+			x++;
+			System.out.println(x);
+		}
 	}
 
 	public void render() {
 		BufferStrategy bs = this.getBufferStrategy();
-		if (bs == null){
+		if (bs == null) {
 			this.createBufferStrategy(3);
 			return;
 		}
-		
-		//THIS IS JUST FOR TESTING
-		int[] data = new int[WIDTH*HEIGHT];
-		for (int i = 0; i < data.length; i++){
-			data[i] = rand.nextInt() << 16;
+
+		// THIS IS JUST FOR TESTING
+		int[] data = new int[WIDTH * HEIGHT];
+		for (int i = 0; i < data.length; i++) {
+			int b = rand.nextInt(100);
+			if (b == 15) {
+				data[i] = 0xffffffff;
+			} else {
+				data[i] = 0xff000000;
+			}
 		}
-		
+
 		frame.renderToFrame(data, 0, 0, WIDTH, HEIGHT);
-		frame.renderToFrame(sprite.getPixels(), 100, 100, sprite.getWidth(), sprite.getHeight());
+		frame.renderToFrame(sprite.getPixels(), x, y, sprite.getWidth(),
+				sprite.getHeight());
 		frame.getPixels(pixels);
-		
+
 		Graphics g = bs.getDrawGraphics();
-		g.drawImage(image,  0, 0, getWidth(), getHeight(), null);
+		g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
 		g.dispose();
-		
+
 		bs.show();
 	}
 }

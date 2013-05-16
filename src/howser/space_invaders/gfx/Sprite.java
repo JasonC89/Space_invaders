@@ -8,7 +8,7 @@ public class Sprite {
 	private boolean flipX;
 	private boolean filpY;
 
-	public Sprite(int[] pixelData, int width, int height) {
+		public Sprite(int[] pixelData, int width, int height) {
 		this.pixels = pixelData;
 		this.width = width;
 		this.height = height;

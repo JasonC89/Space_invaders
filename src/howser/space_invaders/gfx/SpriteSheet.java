@@ -23,11 +23,6 @@ public class SpriteSheet {
 
 		pixels = image.getRGB(0, 0, width, height, null, 0, width);
 
-		for (int i = 0; i < pixels.length; i++) {
-			if (pixels[i] == 0xffff00ff){
-				pixels[i] = 0x00000000;
-			}
-		}
 	}
 	
 	public void render(){

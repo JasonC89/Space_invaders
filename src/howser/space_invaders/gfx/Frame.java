@@ -1,7 +1,5 @@
 package howser.space_invaders.gfx;
 
-import java.util.Arrays;
-
 public class Frame {
 
 	public int[] pixels;
@@ -22,10 +20,15 @@ public class Frame {
 
 	public void renderToFrame(int[] data, int xa, int ya, int w, int h) {
 		int dataIndex = 0;
-		for (int y = ya; y < h + ya; y++) {
-			for (int x = xa; x < w + xa; x++) {
-				if (data[dataIndex] != 0x00000000) {
-					pixels[x + y * width] = data[dataIndex];
+		for (int y = 0; y < h; y++) {
+			for (int x = 0; x < w; x++) {
+				if (data[dataIndex] != 0xffff00ff) {
+					if (0 > xa + x || xa + x > width || 0 > ya + y
+							|| ya + y > height) {
+						dataIndex++;
+						continue;
+					}
+					pixels[(xa + x) + (ya + y) * width] = data[dataIndex];
 				}
 				dataIndex++;
 			}
