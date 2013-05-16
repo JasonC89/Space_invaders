@@ -37,7 +37,7 @@ public class Sprite {
 
 	public void setTint(int colour) {
 		for (int i = 0; i < pixels.length; i++) {
-			if (pixels[i] != TRANSPARENT_COLOUR && pixels[i] != 0xffffffff) {
+			if (pixels[i] != TRANSPARENT_COLOUR) {
 				int r = (colour >> 16) & 0xff;
 				int g = (colour >> 8) & 0xff;
 				int b = (colour) & 0xff;

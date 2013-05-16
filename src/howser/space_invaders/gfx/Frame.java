@@ -36,10 +36,11 @@ public class Frame {
 		}
 	}
 	
-	public void renderString(String string, Font font, int x, int y){
+	public void renderString(String string, Font font, int x, int y, int colour){
 		Sprite[] sprites = font.getStringSprites(string);
 		
 		for (int i = 0; i < sprites.length; i++){
+			sprites[i].setTint(colour);
 			renderToFrame(sprites[i].getPixels(), x + i * sprites[i].getWidth(), y,sprites[i].getWidth(), sprites[i].getHeight());
 		}
 	}

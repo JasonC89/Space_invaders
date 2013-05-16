@@ -158,7 +158,7 @@ public class Game extends Canvas implements Runnable {
 		frame.renderToFrame(data, 0, 0, WIDTH, HEIGHT);
 		frame.renderToFrame(sprite.getPixels(), x, y, sprite.getWidth(),
 				sprite.getHeight());
-		frame.renderString("Hela bbo 123 ASDF (12+3)+= 12", font, 20, 20);
+		frame.renderString("Hela bbo 123 ASDF (12+3)+= 12", font, 20, 20, Colour.RED);
 		frame.getPixels(pixels);
 
 		Graphics g = bs.getDrawGraphics();
