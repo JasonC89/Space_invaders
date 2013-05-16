@@ -1,5 +1,7 @@
 package howser.space_invaders;
 
+import howser.space_invaders.gfx.Colour;
+import howser.space_invaders.gfx.Font;
 import howser.space_invaders.gfx.Frame;
 import howser.space_invaders.gfx.Sprite;
 import howser.space_invaders.gfx.SpriteSheet;
@@ -22,9 +24,11 @@ public class Game extends Canvas implements Runnable {
 
 	public static final int WIDTH = 256;
 	public static final int HEIGHT = WIDTH / 12 * 9;
-	public static final int SCALE = 3;
+	public static final int SCALE = 4;
 	public static final String NAME = "Space invaders";
 	private boolean running = false;
+	
+	private JFrame jFrame;
 
 	private BufferedImage image;
 	private int[] pixels;
@@ -37,6 +41,8 @@ public class Game extends Canvas implements Runnable {
 	private Sprite sprite;
 
 	private int x, y;
+	
+	private Font font;
 
 	public Game() {
 
@@ -48,7 +54,7 @@ public class Game extends Canvas implements Runnable {
 		this.setMinimumSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
 		this.setMaximumSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
 
-		JFrame jFrame = new JFrame();
+		jFrame = new JFrame();
 
 		jFrame.setTitle(NAME);
 		jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -62,6 +68,7 @@ public class Game extends Canvas implements Runnable {
 		jFrame.setLocationRelativeTo(null);
 		jFrame.setResizable(false);
 		jFrame.setVisible(true);
+		this.requestFocus();
 	}
 
 	public void run() {
@@ -109,8 +116,10 @@ public class Game extends Canvas implements Runnable {
 
 	public void init() {
 		test = new SpriteSheet("/sprite_sheet.png");
-		sprite = Sprite.getSpriteFromSheet(test, 0, 0, 16, 16);
-
+		font = new Font("/main_font.png");
+		sprite = Sprite.getSpriteFromSheet(test, 16, 0, 16, 16);
+		sprite.setTint(Colour.getColour(0, 240, 255));
+		
 		input = new InputHandler();
 		input.addKeyListen(KeyEvent.VK_LEFT);
 		input.addKeyListen(KeyEvent.VK_RIGHT);
@@ -122,11 +131,9 @@ public class Game extends Canvas implements Runnable {
 	public void tick() {
 		if (input.isKeyPressed(KeyEvent.VK_LEFT)) {
 			x--;
-			System.out.println(x);
 		}
 		if (input.isKeyPressed(KeyEvent.VK_RIGHT)) {
 			x++;
-			System.out.println(x);
 		}
 	}
 
@@ -151,6 +158,7 @@ public class Game extends Canvas implements Runnable {
 		frame.renderToFrame(data, 0, 0, WIDTH, HEIGHT);
 		frame.renderToFrame(sprite.getPixels(), x, y, sprite.getWidth(),
 				sprite.getHeight());
+		frame.renderString("Hela bbo 123 ASDF (12+3)+= 12", font, 20, 20);
 		frame.getPixels(pixels);
 
 		Graphics g = bs.getDrawGraphics();

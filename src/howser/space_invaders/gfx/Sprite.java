@@ -1,6 +1,7 @@
 package howser.space_invaders.gfx;
 
 public class Sprite {
+	private final int TRANSPARENT_COLOUR = 0xffff00ff;
 	private int[] pixels;
 	private int width;
 	private int height;
@@ -14,6 +15,13 @@ public class Sprite {
 		this.height = height;
 	}
 
+	public Sprite(int[] pixelData, int width, int height, int colour) {
+		this.pixels = pixelData;
+		this.width = width;
+		this.height = height;
+		setTint(colour);
+	}
+
 	public static Sprite getSpriteFromSheet(SpriteSheet sheet, int x, int y,
 			int w, int h) {
 		int[] data = new int[w * h];
@@ -25,6 +33,25 @@ public class Sprite {
 			}
 		}
 		return new Sprite(data, w, h);
+	}
+
+	public void setTint(int colour) {
+		for (int i = 0; i < pixels.length; i++) {
+			if (pixels[i] != TRANSPARENT_COLOUR && pixels[i] != 0xffffffff) {
+				int r = (colour >> 16) & 0xff;
+				int g = (colour >> 8) & 0xff;
+				int b = (colour) & 0xff;
+
+				int sr = (pixels[i] >> 16) & 0xff;
+				int sg = (pixels[i] >> 8) & 0xff;
+				int sb = (pixels[i]) & 0xff;
+
+				r = r * sr / 255;
+				g = g * sg / 255;
+				b = b * sb / 255;
+				pixels[i] = (r << 16) + (g << 8) + (b);
+			}
+		}
 	}
 
 	public int[] getPixels() {
