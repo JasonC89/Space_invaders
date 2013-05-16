@@ -148,9 +148,9 @@ public class Game extends Canvas implements Runnable {
 			}
 		}
 
-		frame.render(data, 0, 0, WIDTH, HEIGHT);
-		frame.render(sprite.getPixels(), x, y, sprite.getWidth(),
-				sprite.getHeight(), true, false);
+		frame.renderToFrame(data, 0, 0, WIDTH, HEIGHT);
+		frame.renderToFrame(sprite.getPixels(), x, y, sprite.getWidth(),
+				sprite.getHeight());
 		frame.getPixels(pixels);
 
 		Graphics g = bs.getDrawGraphics();
