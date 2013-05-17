@@ -26,6 +26,10 @@ public class InputHandler implements KeyListener {
 		listenKeys.add(new Key(keyCode));
 	}
 	
+	public void removeKeyListen(int keyCode){
+		listenKeys.remove(listenKeys.indexOf(keyCode));
+	}
+	
 	public void clearKeyListens(){
 		listenKeys.clear();
 	}

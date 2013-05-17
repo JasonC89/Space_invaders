@@ -21,6 +21,7 @@ public class StateManager {
 		for (int i = 0; i < states.size(); i++){
 			if (states.get(i).name == state){
 				currentState = i;
+				states.get(i).onEnter();
 				return;
 			}
 		}

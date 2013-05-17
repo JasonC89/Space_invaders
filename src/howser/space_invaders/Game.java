@@ -31,6 +31,7 @@ public class Game extends Canvas implements Runnable {
 	private Frame frame;
 	
 	private StateManager stateManager;
+	private InputHandler input;
 
 	public Game() {
 
@@ -103,8 +104,9 @@ public class Game extends Canvas implements Runnable {
 	}
 
 	public void init() {
+		input = new InputHandler();
 		stateManager = new StateManager();
-		stateManager.addState(new MainMenuState("main_menu", stateManager));
+		stateManager.addState(new MainMenuState("main_menu", stateManager, input));
 	}
 
 	public void tick() {
