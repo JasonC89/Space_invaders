@@ -1,20 +1,16 @@
 package howser.space_invaders;
 
-import howser.space_invaders.gfx.Colour;
-import howser.space_invaders.gfx.Font;
 import howser.space_invaders.gfx.Frame;
-import howser.space_invaders.gfx.Sprite;
-import howser.space_invaders.gfx.SpriteSheet;
+import howser.space_invaders.state.MainMenuState;
+import howser.space_invaders.state.StateManager;
 
 import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
-import java.util.Random;
 
 import javax.swing.JFrame;
 
@@ -33,16 +29,8 @@ public class Game extends Canvas implements Runnable {
 	private BufferedImage image;
 	private int[] pixels;
 	private Frame frame;
-	private InputHandler input;
-
-	// for testing
-	private SpriteSheet test;
-	private Random rand = new Random();
-	private Sprite sprite;
-
-	private int x, y;
 	
-	private Font font;
+	private StateManager stateManager;
 
 	public Game() {
 
@@ -115,26 +103,12 @@ public class Game extends Canvas implements Runnable {
 	}
 
 	public void init() {
-		test = new SpriteSheet("/sprite_sheet.png");
-		font = new Font("/main_font.png");
-		sprite = Sprite.getSpriteFromSheet(test, 16, 0, 16, 16);
-		sprite.setTint(Colour.getColour(0, 240, 255));
-		
-		input = new InputHandler();
-		input.addKeyListen(KeyEvent.VK_LEFT);
-		input.addKeyListen(KeyEvent.VK_RIGHT);
-		this.addKeyListener(input);
-		x = WIDTH / 2;
-		y = HEIGHT - 20;
+		stateManager = new StateManager();
+		stateManager.addState(new MainMenuState("main_menu", stateManager));
 	}
 
 	public void tick() {
-		if (input.isKeyPressed(KeyEvent.VK_LEFT)) {
-			x--;
-		}
-		if (input.isKeyPressed(KeyEvent.VK_RIGHT)) {
-			x++;
-		}
+		stateManager.tick();
 	}
 
 	public void render() {
@@ -143,22 +117,7 @@ public class Game extends Canvas implements Runnable {
 			this.createBufferStrategy(3);
 			return;
 		}
-
-		// THIS IS JUST FOR TESTING
-		int[] data = new int[WIDTH * HEIGHT];
-		for (int i = 0; i < data.length; i++) {
-			int b = rand.nextInt(100);
-			if (b == 15) {
-				data[i] = 0xffffffff;
-			} else {
-				data[i] = 0xff000000;
-			}
-		}
-		
-		frame.renderToFrame(data, 0, 0, WIDTH, HEIGHT);
-		frame.renderToFrame(sprite.getPixels(), x, y, sprite.getWidth(),
-				sprite.getHeight());
-		frame.renderString("Hela bbo 123 ASDF (12+3)+= 12", font, 20, 20, Colour.RED);
+		stateManager.render(frame);
 		frame.getPixels(pixels);
 
 		Graphics g = bs.getDrawGraphics();
@@ -166,5 +125,9 @@ public class Game extends Canvas implements Runnable {
 		g.dispose();
 
 		bs.show();
+	}
+	
+	public void addInputHandler(InputHandler input){
+		this.addKeyListener(input);
 	}
 }
