@@ -1,6 +1,7 @@
 package howser.space_invaders;
 
 import howser.space_invaders.gfx.Frame;
+import howser.space_invaders.state.ExitState;
 import howser.space_invaders.state.MainMenuState;
 import howser.space_invaders.state.StateManager;
 
@@ -23,13 +24,13 @@ public class Game extends Canvas implements Runnable {
 	public static final int SCALE = 4;
 	public static final String NAME = "Space invaders";
 	private boolean running = false;
-	
+
 	private JFrame jFrame;
 
 	private BufferedImage image;
 	private int[] pixels;
 	private Frame frame;
-	
+
 	private StateManager stateManager;
 	private InputHandler input;
 
@@ -47,7 +48,6 @@ public class Game extends Canvas implements Runnable {
 
 		jFrame.setTitle(NAME);
 		jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
 		jFrame.setLayout(new BorderLayout());
 
 		jFrame.add(this, BorderLayout.CENTER);
@@ -101,12 +101,18 @@ public class Game extends Canvas implements Runnable {
 
 	public synchronized void stop() {
 		running = false;
+		System.exit(0);
 	}
 
 	public void init() {
 		input = new InputHandler();
+		this.addKeyListener(input);
 		stateManager = new StateManager();
-		stateManager.addState(new MainMenuState("main_menu", stateManager, input));
+		stateManager.addState(new MainMenuState("main_menu", stateManager,
+				input));
+		stateManager.addState(new ExitState("exit_state", stateManager, this));
+		stateManager.changeState("main_menu");
+
 	}
 
 	public void tick() {
@@ -114,22 +120,28 @@ public class Game extends Canvas implements Runnable {
 	}
 
 	public void render() {
-		BufferStrategy bs = this.getBufferStrategy();
-		if (bs == null) {
-			this.createBufferStrategy(3);
-			return;
+		if (this.jFrame != null) {
+			BufferStrategy bs = this.getBufferStrategy();
+			if (bs == null) {
+				this.createBufferStrategy(3);
+				return;
+			}
+			stateManager.render(frame);
+			frame.getPixels(pixels);
+
+			Graphics g = bs.getDrawGraphics();
+			g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
+			g.dispose();
+
+			bs.show();
 		}
-		stateManager.render(frame);
-		frame.getPixels(pixels);
+	}
 
-		Graphics g = bs.getDrawGraphics();
-		g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
-		g.dispose();
-
-		bs.show();
+	public void addInputHandler(InputHandler input) {
+		this.addKeyListener(input);
 	}
 	
-	public void addInputHandler(InputHandler input){
-		this.addKeyListener(input);
+	public static void main(String[] args) {
+		new Game().start();
 	}
 }

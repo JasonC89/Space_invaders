@@ -4,7 +4,7 @@ import howser.space_invaders.gfx.Frame;
 
 public abstract class BaseState {
 	
-	private StateManager stateManager;
+	protected StateManager stateManager;
 	public String name;
 	
 	public BaseState(String name, StateManager stateManager){

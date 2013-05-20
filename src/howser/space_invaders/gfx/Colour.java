@@ -10,7 +10,7 @@ public class Colour {
 	public static final int BLUE = getColour(0,0,255);
 	public static final int RED = getColour(255,0,0);
 	public static final int WHITE = getColour(255,255,255);
-	public static final int BLACK = getColour(255,255,255);
+	public static final int BLACK = getColour(0,0,0);
 	public static final int PURPLE = getColour(255,0,255);
 	public static final int YELLOW = getColour(0,255,255);
 }

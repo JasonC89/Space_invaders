@@ -44,4 +44,18 @@ public class Frame {
 			renderToFrame(sprites[i].getPixels(), x + i * sprites[i].getWidth(), y,sprites[i].getWidth(), sprites[i].getHeight());
 		}
 	}
+	
+	public void clear(int colour){
+		for (int i = 0; i < pixels.length; i++){
+			pixels[i] = colour;
+		}
+	}
+	
+	public int getWidth(){
+		return width;
+	}
+	
+	public int getHeight(){
+		return height;
+	}
 }

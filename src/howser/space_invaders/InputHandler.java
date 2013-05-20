@@ -6,11 +6,13 @@ import java.util.ArrayList;
 
 class Key {
 	public int keyCode;
-	public boolean isPressed = false;
+	public boolean isPressed;
+	public boolean wasPressed;
 	
 	public Key(int keyCode){
 		this.keyCode = keyCode;
 		this.isPressed = false;
+		this.wasPressed = false;
 	}
 }
 
@@ -47,6 +49,7 @@ public class InputHandler implements KeyListener {
 		for (int i = 0; i < listenKeys.size(); i++){
 			if (e.getKeyCode() == listenKeys.get(i).keyCode){
 				listenKeys.get(i).isPressed = false;
+				listenKeys.get(i).wasPressed = false;
 				break;
 			}
 		}
@@ -70,6 +73,18 @@ public class InputHandler implements KeyListener {
 		for (int i = 0; i < listenKeys.size(); i++){
 			if (listenKeys.get(i).keyCode == keyCode){
 				if (!listenKeys.get(i).isPressed){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	public boolean keyPressedThisFrame(int keyCode){
+		for (int i = 0; i < listenKeys.size(); i++){
+			if (listenKeys.get(i).keyCode == keyCode){
+				if (listenKeys.get(i).isPressed && !listenKeys.get(i).wasPressed){
+					listenKeys.get(i).wasPressed = true;
 					return true;
 				}
 			}
